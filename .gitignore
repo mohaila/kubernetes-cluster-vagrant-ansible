@@ -1,0 +1,4 @@
+.DS_Store
+.vagrant
+pyenv
+ansible/join-command.sh
