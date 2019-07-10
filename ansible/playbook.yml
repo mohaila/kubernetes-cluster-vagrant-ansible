@@ -119,7 +119,7 @@
     become: no
     local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="join-command.sh"
 
-- hosts: k8s-node-1 k8s-node-2 k8s-node-2
+- hosts: k8s-node-1 k8s-node-2 k8s-node-3
   become: true
   tasks:
   - name: Copy the join command to server location
