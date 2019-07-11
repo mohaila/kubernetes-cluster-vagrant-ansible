@@ -67,5 +67,81 @@ k8s-node-1   Ready    <none>   18m   v1.15.0
 k8s-node-2   Ready    <none>   15m   v1.15.0
 k8s-node-3   Ready    <none>   12m   v1.15.0
 ```
+## Microbot deployment
+After Microbot deployment, view the Pods:
+```bash
+bash
+$ kubectl get pods --all-namespaces
+default       microbot-7dd47b8fd6-5c5zb                  1/1     Running   0          11m
+default       microbot-7dd47b8fd6-8bzhd                  1/1     Running   0          11m
+default       microbot-7dd47b8fd6-9fw68                  1/1     Running   0          11m
+default       microbot-7dd47b8fd6-9fzr7                  1/1     Running   0          11m
+default       microbot-7dd47b8fd6-crx4d                  1/1     Running   0          11m
+default       microbot-7dd47b8fd6-ppcs5                  1/1     Running   0          11m
+kube-system   calico-kube-controllers-658558ddf8-qg8xk   1/1     Running   0          11m
+kube-system   calico-node-6rnnf                          1/1     Running   0          8m7s
+kube-system   calico-node-bl9hb                          1/1     Running   0          11m
+kube-system   calico-node-xvrbx                          1/1     Running   0          2m7s
+kube-system   calico-node-zbddc                          1/1     Running   0          5m1s
+kube-system   coredns-5c98db65d4-cp9m4                   1/1     Running   0          11m
+kube-system   coredns-5c98db65d4-l4p7q                   1/1     Running   0          11m
+kube-system   etcd-k8s-master                            1/1     Running   0          10m
+kube-system   kube-apiserver-k8s-master                  1/1     Running   0          10m
+kube-system   kube-controller-manager-k8s-master         1/1     Running   0          10m
+kube-system   kube-proxy-mtngj                           1/1     Running   0          8m7s
+kube-system   kube-proxy-n2pvz                           1/1     Running   0          5m1s
+kube-system   kube-proxy-z8nns                           1/1     Running   0          2m7s
+kube-system   kube-proxy-zxfqs                           1/1     Running   0          11m
+kube-system   kube-scheduler-k8s-master                  1/1     Running   0          10m
+```
+And the services:
+```bash
+bash
+$ kubectl get services
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes         ClusterIP   10.96.0.1       <none>        443/TCP        15m
+microbot-service   NodePort    10.108.174.59   <none>        80:31873/TCP   14m
+```
+To get more info:
+```bash
+bash
+$ kubectl describe services/microbot-service
+Name:                     microbot-service
+Namespace:                default
+Labels:                   app=microbot
+Annotations:              <none>
+Selector:                 app=microbot
+Type:                     NodePort
+IP:                       10.108.174.59
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  31873/TCP
+Endpoints:                192.168.109.65:80,192.168.109.66:80,192.168.109.67:80 + 3 more...
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+```
+To test all the pods, use the service IP, to test a specific pod use the endpoints:
+```bash
+bash
+$ curl 10.108.174.59
+<!DOCTYPE html>
+<html>
+  <style type="text/css">
+    .centered
+      {
+      text-align:center;
+      margin-top:0px;
+      margin-bottom:0px;
+      padding:0px;
+      }
+  </style>
+  <body>
+    <p class="centered"><img src="microbot.png" alt="microbot"/></p>
+    <p class="centered">Container hostname: microbot-7dd47b8fd6-ppcs5</p>
+  </body>
+</html>
+```
+If you repeat the test, each time you get a response from a different pod (different Container hostname)
 
 ### Have fun with deploying services

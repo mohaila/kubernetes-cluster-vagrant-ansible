@@ -1,0 +1,13 @@
+---
+- hosts: k8s-master
+  become: false
+  tasks:
+  - name: Deploy Microbot
+    command: kubectl create deployment microbot --image=dontrebootme/microbot:v1
+
+  - name: Scale Microbot deployment
+    command: kubectl scale deployment microbot --replicas=6
+
+  - name: Expose deployment and create a service
+    command: kubectl expose deployment microbot --type=NodePort --port=80 --name=microbot-service
+    
